@@ -1,5 +1,4 @@
-# Common Patterns  
-### የተለመዱ ንድፎች  
+# Common Patterns( የተለመዱ ንድፎች )  
 
 ## ከውሎች ወጪ ማድረግ  
 ከውጤት በኋላ ገንዘቦችን ለመላክ የሚመከረው ዘዴ የወጪ-ንድፍን (withdrawal pattern) መጠቀም ነው።  
@@ -12,7 +11,7 @@
 
 በሚከተለው ውል ውስጥ, ከአሁን በፊት በጣም ሀብታም ካልሆኑ, አሁን በጣም ሀብታም ከሆነው ገንዘብ ይቀበላሉ።  
 
-
+```
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.4;
 
@@ -22,7 +21,7 @@ uint public mostSent;
 
     mapping(address => uint) pendingWithdrawals;
 
-/// የተላከው የኤተር(Ether) መጠን አሁን ካለው ከፍተኛ ///መጠን ከፍ ያለ  
+/// የተላከው የኤተር(Ether) መጠን አሁን ካለው ከፍተኛ መጠን ከፍ ያለ  
  error NotEnoughEther();
 
     constructor() payable {
@@ -40,16 +39,16 @@ uint public mostSent;
     function withdraw() public {
         uint amount = pendingWithdrawals[msg.sender];
 
-// እንደገና የመግባት ጥቃቶችን (reentrancy attacks) //ለመከላከል ከመላክዎ በፊት በመጠባበቅ ላይ ያለውን ተመላሽ ገንዘብ ዜሮ //ማድረግዎን ያስታውሱ።
+// እንደገና የመግባት ጥቃቶችን (reentrancy attacks) መከላከል ከመላክዎ በፊት በመጠባበቅ ላይ ያለውን ተመላሽ ገንዘብ ዜሮ ማድረግዎን ያስታውሱ።
 
         pendingWithdrawals[msg.sender] = 0;
         payable(msg.sender).transfer(amount);
     }
 
 }
-
+```
 ይህ ይበልጥ ሊታወቅ ከሚችለው የመላኪያ ንድፍ በተቃራኒ ነው፡-
-
+```
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.4;
 
@@ -57,7 +56,7 @@ contract SendContract {
 address payable public richest;
 uint public mostSent;
 
-/// የተላከው የኤተር(Ether) መጠን አሁን ካለው ከፍተኛ ///መጠን ከፍ ያለ አልነበረም
+/// የተላከው የኤተር(Ether) መጠን አሁን ካለው ከፍተኛ መጠን ከፍ ያለ አልነበረም
 error NotEnoughEther();
 
     constructor() payable {
@@ -74,7 +73,7 @@ error NotEnoughEther();
     }
 
 }
-
+```
 በዚህ ምሳሌ አንድ አጥቂ ውሉን ወደማይጠቅም ሁኔታ ሊያጠምደው የሚችለው ሃብታሞች (richest ) የውል አድራሻ እንዲሆኑ በማድረግ የመቀበል ወይም የመመለሻ ተግባር ያልተሳካለት መሆኑን (ለምሳሌ revert () በመጠቀም ወይም ወደ እነርሱ ከተላለፈው 2300 የጋዝ ክፍያ በላይ ብቻ በመመገብ) ልብ ይበሉ።በዚህ መንገድ፣ ወደ “የተመረዘ” ውል ገንዘብ ለማድረስ ዝውውር በተጠራ ቁጥር አይሳካም እና ስለዚህ "በጣም ሪችስት" አይሳካም ፣ ውሉ ለዘላለም ታስሯል።
 
 በአንጻሩ፣ ከመጀመሪያው ምሳሌ የወጪ-ንድፍን ከተጠቀሙ፣ አጥቂው የራሱን ወይም የራሷን ወጪ እንዲከሽፍ ብቻ ነው እንጂ የተቀሩትን የውል ስራዎችን አይደለም።
